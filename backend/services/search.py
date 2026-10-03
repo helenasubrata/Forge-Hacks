@@ -1,16 +1,23 @@
 import math
 import re
+import time
 from difflib import SequenceMatcher
 
 import requests
 
-CROSSREF_URL = "https://api.crossref.org/works"
+CONTACT_EMAIL = "you@example.com"  # put your real email here
 
+CROSSREF_URL = "https://api.crossref.org/works"
+OPENALEX_URL = "https://api.openalex.org/works"
+SEMANTIC_URL = "https://api.semanticscholar.org/graph/v1/paper/search"
+
+
+# ---------- Crossref ----------
 
 def search_crossref(query, rows=5):
     """Look up papers in Crossref and return a clean list of results."""
     params = {"query.bibliographic": query, "rows": rows}
-    headers = {"User-Agent": "Receipts/0.1 (mailto:notwilliam007@gmail.com)"}
+    headers = {"User-Agent": f"Receipts/0.1 (mailto:{"notwilliam007@gmail.com"})"}
 
     response = requests.get(CROSSREF_URL, params=params, headers=headers, timeout=15)
     response.raise_for_status()
@@ -32,11 +39,13 @@ def search_crossref(query, rows=5):
             "journal": (item.get("container-title") or [""])[0],
             "doi": item.get("DOI"),
             "url": item.get("URL"),
+            "abstract": "",
+            "citations": item.get("is-referenced-by-count", 0),
         })
     return results
 
-OPENALEX_URL = "https://api.openalex.org/works"
 
+# ---------- OpenAlex ----------
 
 def rebuild_abstract(inverted_index):
     """OpenAlex stores abstracts as word -> positions. Put them back in order."""
@@ -51,7 +60,7 @@ def rebuild_abstract(inverted_index):
 
 def search_openalex(query, rows=5):
     """Look up papers in OpenAlex and return a clean list of results."""
-    params = {"search": query, "per-page": rows, "mailto": "you@example.com"}
+    params = {"search": query, "per-page": rows, "mailto": CONTACT_EMAIL}
     response = requests.get(OPENALEX_URL, params=params, timeout=15)
     response.raise_for_status()
 
@@ -73,6 +82,38 @@ def search_openalex(query, rows=5):
         })
     return results
 
+
+# ---------- Semantic Scholar ----------
+
+def search_semantic_scholar(query, rows=5):
+    """Look up papers in Semantic Scholar (no key needed, but it rate-limits)."""
+    params = {
+        "query": query,
+        "limit": rows,
+        "fields": "title,year,authors,venue,externalIds,citationCount,abstract,url",
+    }
+    response = requests.get(SEMANTIC_URL, params=params, timeout=15)
+    if response.status_code == 429:  # "too many requests": wait a moment, try once more
+        time.sleep(2)
+        response = requests.get(SEMANTIC_URL, params=params, timeout=15)
+    response.raise_for_status()
+
+    results = []
+    for item in response.json().get("data", []):
+        ids = item.get("externalIds") or {}
+        results.append({
+            "title": item.get("title") or "",
+            "authors": [a.get("name", "") for a in item.get("authors", [])],
+            "year": item.get("year"),
+            "journal": item.get("venue") or "",
+            "doi": ids.get("DOI"),
+            "url": item.get("url"),
+            "abstract": item.get("abstract") or "",
+            "citations": item.get("citationCount") or 0,
+        })
+    return results
+
+
 # ---------- combining ----------
 
 def _normalize(text):
@@ -80,11 +121,13 @@ def _normalize(text):
     return re.sub(r"[^a-z0-9 ]", "", (text or "").lower()).strip()
 
 
-def _key(paper):
-    """Same DOI (or same title if no DOI) means same paper."""
-    if paper.get("doi"):
-        return "doi:" + paper["doi"].lower()
-    return "title:" + _normalize(paper["title"])
+def _same_paper(a, b):
+    """Same DOI, or exactly the same title, means same paper."""
+    doi_a, doi_b = (a.get("doi") or "").lower(), (b.get("doi") or "").lower()
+    if doi_a and doi_a == doi_b:
+        return True
+    title_a = _normalize(a["title"])
+    return bool(title_a) and title_a == _normalize(b["title"])
 
 
 def _score(paper, query):
@@ -95,9 +138,15 @@ def _score(paper, query):
 
 
 def search_all(query, rows=5):
-    """Search every source, merge duplicates, and rank the best matches first."""
-    found = {}
-    for source_name, search in [("crossref", search_crossref), ("openalex", search_openalex)]:
+    """Search every source, merge duplicates, settle the year, rank best first."""
+    sources = [
+        ("crossref", search_crossref),
+        ("openalex", search_openalex),
+        ("semantic_scholar", search_semantic_scholar),
+    ]
+    papers = []
+
+    for source_name, search in sources:
         try:
             results = search(query, rows)
         except requests.RequestException as error:
@@ -105,23 +154,33 @@ def search_all(query, rows=5):
             continue
 
         for paper in results:
-            key = _key(paper)
-            if key not in found:
+            match = next((p for p in papers if _same_paper(p, paper)), None)
+            if match is None:
                 paper["sources"] = [source_name]
-                found[key] = paper
+                paper["years_seen"] = [paper["year"]] if paper.get("year") else []
+                papers.append(paper)
             else:
-                existing = found[key]
-                existing["sources"].append(source_name)
+                match["sources"].append(source_name)
+                if paper.get("year"):
+                    match["years_seen"].append(paper["year"])
+                match["citations"] = max(match.get("citations", 0), paper.get("citations", 0))
                 for field, value in paper.items():
-                    if value and not existing.get(field):
-                        existing[field] = value
+                    if value and not match.get(field):
+                        match[field] = value
 
-    papers = list(found.values())
     for paper in papers:
+        # A paper can be republished later, but never published before it existed,
+        # so when sources disagree we trust the earliest year and flag it.
+        years = paper.pop("years_seen")
+        paper["year"] = min(years) if years else None
+        paper["year_uncertain"] = len(set(years)) > 1
         paper["score"] = round(_score(paper, query), 3)
+
     papers.sort(key=lambda p: p["score"], reverse=True)
     return papers[:rows]
 
+
 if __name__ == "__main__":
     for r in search_all("Attention is all you need"):
-        print(r["score"], "|", r["title"], "|", r["year"], "|", ", ".join(r["sources"]))
+        flag = " (year uncertain)" if r["year_uncertain"] else ""
+        print(r["score"], "|", r["title"], "|", f"{r['year']}{flag}", "|", ", ".join(r["sources"]))
