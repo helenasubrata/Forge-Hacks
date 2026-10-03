@@ -1,9 +1,15 @@
+import os
+
+from dotenv import load_dotenv
 import math
 import re
 import time
 from difflib import SequenceMatcher
 
 import requests
+
+load_dotenv()  # reads your private keys from the .env file
+S2_API_KEY = os.getenv("S2_API_KEY")
 
 CONTACT_EMAIL = "notwilliam007@gmail.com"  # put your real email here
 
@@ -85,17 +91,36 @@ def search_openalex(query, rows=5):
 
 # ---------- Semantic Scholar ----------
 
+_s2_last_call = 0.0
+_s2_cache = {}
+
+
 def search_semantic_scholar(query, rows=5):
-    """Look up papers in Semantic Scholar (no key needed, but it rate-limits)."""
+    """Look up papers in Semantic Scholar politely: cached, throttled, with backoff."""
+    global _s2_last_call
+
+    cache_key = (query.lower().strip(), rows)
+    if cache_key in _s2_cache:  # asked before? reuse the answer, no new request
+        return _s2_cache[cache_key]
+
     params = {
         "query": query,
         "limit": rows,
         "fields": "title,year,authors,venue,externalIds,citationCount,abstract,url",
     }
-    response = requests.get(SEMANTIC_URL, params=params, timeout=15)
-    if response.status_code == 429:  # "too many requests": wait a moment, try once more
-        time.sleep(2)
-        response = requests.get(SEMANTIC_URL, params=params, timeout=15)
+    headers = {"x-api-key": S2_API_KEY} if S2_API_KEY else {}
+
+    for attempt in range(4):
+        wait = 1.1 - (time.time() - _s2_last_call)  # stay under 1 request per second
+        if wait > 0:
+            time.sleep(wait)
+        _s2_last_call = time.time()
+
+        response = requests.get(SEMANTIC_URL, params=params, headers=headers, timeout=15)
+        if response.status_code != 429:
+            break
+        if attempt < 3:
+            time.sleep(2 ** attempt)  # exponential backoff: wait 1, 2, then 4 seconds
     response.raise_for_status()
 
     results = []
@@ -111,6 +136,8 @@ def search_semantic_scholar(query, rows=5):
             "abstract": item.get("abstract") or "",
             "citations": item.get("citationCount") or 0,
         })
+
+    _s2_cache[cache_key] = results
     return results
 
 
