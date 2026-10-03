@@ -207,7 +207,12 @@ def search_all(query, rows=5):
         # A paper can be republished later, but never published before it existed,
         # so when sources disagree we trust the earliest year and flag it.
         years = paper.pop("years_seen")
-        paper["year"] = min(years) if years else None
+        if not years:
+            paper["year"] = None
+        elif max(years) - min(years) >= 2:
+            paper["year"] = min(years)  # big gap: the later one is a re-upload
+        else:
+            paper["year"] = max(years)  # 1-year gap: preprint vs published, use published
         paper["year_uncertain"] = len(set(years)) > 1
         paper["score"] = round(_score(paper, query), 3)
 
