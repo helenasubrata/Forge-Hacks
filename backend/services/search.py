@@ -31,7 +31,49 @@ def search_crossref(query, rows=5):
         })
     return results
 
+OPENALEX_URL = "https://api.openalex.org/works"
+
+
+def rebuild_abstract(inverted_index):
+    """OpenAlex stores abstracts as word -> positions. Put them back in order."""
+    if not inverted_index:
+        return ""
+    words = {}
+    for word, positions in inverted_index.items():
+        for pos in positions:
+            words[pos] = word
+    return " ".join(words[i] for i in sorted(words))
+
+
+def search_openalex(query, rows=5):
+    """Look up papers in OpenAlex and return a clean list of results."""
+    params = {"search": query, "per-page": rows, "mailto": "you@example.com"}
+    response = requests.get(OPENALEX_URL, params=params, timeout=15)
+    response.raise_for_status()
+
+    results = []
+    for item in response.json()["results"]:
+        authors = [a["author"]["display_name"] for a in item.get("authorships", [])]
+        source = (item.get("primary_location") or {}).get("source") or {}
+        doi_url = item.get("doi") or ""
+
+        results.append({
+            "title": item.get("title") or "",
+            "authors": authors,
+            "year": item.get("publication_year"),
+            "journal": source.get("display_name") or "",
+            "doi": doi_url.replace("https://doi.org/", "") or None,
+            "url": doi_url or item.get("id"),
+            "abstract": rebuild_abstract(item.get("abstract_inverted_index")),
+            "citations": item.get("cited_by_count", 0),
+        })
+    return results
 
 if __name__ == "__main__":
+    print("--- Crossref ---")
     for r in search_crossref("Attention is all you need"):
         print(r["title"], "|", r["year"], "|", r["doi"])
+
+    print("--- OpenAlex ---")
+    for r in search_openalex("Attention is all you need"):
+        print(r["title"], "|", r["year"], "|", r["citations"], "citations")
