@@ -5,7 +5,7 @@ from difflib import SequenceMatcher
 
 import requests
 
-CONTACT_EMAIL = "you@example.com"  # put your real email here
+CONTACT_EMAIL = "notwilliam007@gmail.com"  # put your real email here
 
 CROSSREF_URL = "https://api.crossref.org/works"
 OPENALEX_URL = "https://api.openalex.org/works"
@@ -17,7 +17,7 @@ SEMANTIC_URL = "https://api.semanticscholar.org/graph/v1/paper/search"
 def search_crossref(query, rows=5):
     """Look up papers in Crossref and return a clean list of results."""
     params = {"query.bibliographic": query, "rows": rows}
-    headers = {"User-Agent": f"Receipts/0.1 (mailto:{"notwilliam007@gmail.com"})"}
+    headers = {"User-Agent": f"Receipts/0.1 (mailto:{CONTACT_EMAIL})"}
 
     response = requests.get(CROSSREF_URL, params=params, headers=headers, timeout=15)
     response.raise_for_status()
@@ -160,9 +160,17 @@ def search_all(query, rows=5):
                 paper["years_seen"] = [paper["year"]] if paper.get("year") else []
                 papers.append(paper)
             else:
-                match["sources"].append(source_name)
+                if source_name not in match["sources"]:
+                    match["sources"].append(source_name)
+                earliest = min(match["years_seen"]) if match["years_seen"] else None
                 if paper.get("year"):
                     match["years_seen"].append(paper["year"])
+                # Prefer the details of the earliest version (the original, not a re-upload).
+                if paper.get("year") and (earliest is None or paper["year"] < earliest):
+                    match["doi"] = paper.get("doi")
+                    match["url"] = paper.get("url")
+                    if paper.get("journal"):
+                        match["journal"] = paper["journal"]
                 match["citations"] = max(match.get("citations", 0), paper.get("citations", 0))
                 for field, value in paper.items():
                     if value and not match.get(field):

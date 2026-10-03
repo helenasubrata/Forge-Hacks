@@ -1,3 +1,14 @@
+def _end(text):
+    """Add a period unless the text already ends with . ? or !"""
+    text = (text or "").strip()
+    return text if text.endswith((".", "?", "!")) else text + "."
+
+
+def _mla_title(title):
+    """MLA puts the period inside the quotes, but not after ? or !"""
+    t = (title or "").strip()
+    return f'"{t}"' if t.endswith(("?", "!")) else f'"{t.rstrip(".")}."'
+
 def _split_name(full_name):
     """Split 'Ashish Vaswani' into ('Vaswani', ['Ashish'])."""
     parts = full_name.strip().split()
@@ -27,7 +38,7 @@ def format_apa(paper):
         author_text = ", ".join(names[:19]) + ", . . . " + names[-1]
 
     year = paper.get("year") or "n.d."
-    parts = [f"{author_text} ({year}).".strip(), f"{paper['title'].rstrip('.')}."]
+    parts = [f"{author_text} ({year}).".strip(), _end(paper["title"])]
     if paper.get("journal"):
         parts.append(f"*{paper['journal']}*.")
     if _link(paper):
@@ -53,7 +64,7 @@ def format_mla(paper):
     parts = []
     if author_text:
         parts.append(f"{author_text}.")
-    parts.append(f'"{paper["title"].rstrip(".")}."')
+    parts.append(_mla_title(paper["title"]))
     tail = []
     if paper.get("journal"):
         tail.append(f"*{paper['journal']}*")
