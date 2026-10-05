@@ -1,5 +1,5 @@
 import os
-
+import unicodedata
 from dotenv import load_dotenv
 import math
 import re
@@ -148,13 +148,26 @@ def _normalize(text):
     return re.sub(r"[^a-z0-9 ]", "", (text or "").lower()).strip()
 
 
+def _first_surname(paper):
+    """Last name of the first author, plain ASCII: 'Łukasz Kaiser' -> 'kaiser'."""
+    authors = paper.get("authors") or []
+    if not authors:
+        return ""
+    plain = unicodedata.normalize("NFKD", authors[0]).encode("ascii", "ignore").decode().lower()
+    parts = re.findall(r"[a-z]+", plain)
+    return parts[-1] if parts else ""
+
+
 def _same_paper(a, b):
-    """Same DOI, or exactly the same title, means same paper."""
+    """Same DOI means same paper. Same title only counts if the first author matches too."""
     doi_a, doi_b = (a.get("doi") or "").lower(), (b.get("doi") or "").lower()
     if doi_a and doi_a == doi_b:
         return True
     title_a = _normalize(a["title"])
-    return bool(title_a) and title_a == _normalize(b["title"])
+    if not title_a or title_a != _normalize(b["title"]):
+        return False
+    first_a, first_b = _first_surname(a), _first_surname(b)
+    return not first_a or not first_b or first_a == first_b
 
 
 def _score(paper, query):
