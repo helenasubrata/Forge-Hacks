@@ -21,13 +21,16 @@ Abstract:
 {abstract}
 
 How does this abstract relate to the claim? Pick one verdict:
-- "supports": the abstract directly backs the claim
+- "supports": the abstract directly backs the claim as one of its own findings or conclusions (not just background, an assumption, or a method)
 - "partially_supports": it backs only part of the claim, or a weaker version of it
 - "contradicts": it says the opposite of the claim
 - "unrelated": it does not address the claim
 
 Return JSON with exactly these keys:
-{{"verdict": "...", "evidence": "the single most relevant sentence, copied word for word from the abstract, or empty if none", "explanation": "one short plain-English sentence"}}"""
+{{"verdict": "...",
+  "evidence": "the single most relevant sentence, copied word for word from the abstract, or empty if none",
+  "evidence_type": "finding" if the evidence reports this paper's own result or conclusion, "background" if it describes prior knowledge, motivation or an assumption, "method" if it describes what the study did,
+  "explanation": "one short plain-English sentence"}}"""
 
 VERDICTS = {"supports", "partially_supports", "contradicts", "unrelated"}
 MAX_ABSTRACT_CHARS = 4000
@@ -72,6 +75,7 @@ def check_support(claim, paper):
         "verdict": verdict,
         "evidence": evidence if evidence_verified else "",
         "evidence_verified": evidence_verified,
+        "evidence_type": str(result.get("evidence_type") or "").strip().lower(),
         "explanation": str(result.get("explanation") or "").strip(),
     }
 
@@ -79,7 +83,7 @@ def check_support(claim, paper):
 def trust_label(check):
     """Turn a support check into the label people see."""
     verdict = check["verdict"]
-    if verdict == "supports" and check["evidence_verified"]:
+    if verdict == "supports" and check["evidence_verified"] and check.get("evidence_type") == "finding":
         return "Verified"
     if verdict in ("supports", "partially_supports"):
         return "Weak support"
