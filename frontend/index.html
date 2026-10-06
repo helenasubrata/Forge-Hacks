@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Receipt — Citation Trust</title>
+
+    <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+    <img
+        src="assets/logo.svg"
+        alt="Receipts"
+        class="brand-logo"
+    />
+
+    <span>Receipts</span>
+</div>
+
+        <nav class="nav">
+
+            <button class="nav-item active" data-page="audit">
+                <span>◉</span>
+                Audit
+            </button>
+
+            <button class="nav-item" data-page="find">
+                <span>⌕</span>
+                Find Sources
+            </button>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="system-status">
+                <span class="status-dot"></span>
+
+                <div>
+                    <strong>System ready</strong>
+                    <small>AI verification active</small>
+                </div>
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+    <main class="main">
+
+        <header class="topbar">
+
+            <div>
+                <div class="eyebrow">RESEARCH ASSISTANT</div>
+                <h2 id="pageTitle">Citation Audit</h2>
+            </div>
+
+            <div class="api-status">
+                <span class="status-dot"></span>
+                API ready
+            </div>
+
+        </header>
+
+
+        <!-- AUDIT PAGE -->
+        <section id="auditPage" class="page active">
+
+            <div class="hero">
+
+                <div>
+                    <h3>Check your citations.</h3>
+
+                    <p>
+                        Paste a citation or bibliography and Receipt
+                        will check whether the sources can be verified
+                        and whether they support your claims.
+                    </p>
+                </div>
+
+                <div class="badge">
+                    ✦ AI Verification
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <div>
+                        <h3>Paste your citations</h3>
+
+                        <p>
+                            Add one citation or an entire bibliography.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <textarea
+                    id="auditInput"
+                    placeholder="Paste your citation or bibliography here...
+
+Example:
+
+Smith, J. (2024). The Effects of AI on Student Learning.
+Journal of Educational Technology."
+                ></textarea>
+
+
+                <div class="input-footer">
+
+                    <span id="charCount">
+                        0 characters
+                    </span>
+
+                    <button id="auditButton" class="primary-button">
+                        ✦ Check Receipts
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div id="auditError" class="error hidden"></div>
+
+
+            <div id="loading" class="loading hidden">
+                <div class="spinner"></div>
+
+                <div>
+                    <strong>Checking citations...</strong>
+                    <span>
+                        Searching sources and comparing evidence.
+                    </span>
+                </div>
+            </div>
+
+
+            <!-- RESULTS -->
+
+            <div id="resultsSection" class="hidden">
+
+                <div class="section-header">
+
+                    <div>
+                        <div class="eyebrow">AUDIT RESULTS</div>
+                        <h3>Citation overview</h3>
+                    </div>
+
+                    <button id="clearButton" class="secondary-button">
+                        Clear
+                    </button>
+
+                </div>
+
+
+                <div class="summary">
+
+                    <div class="summary-card verified">
+                        <div class="summary-icon">✓</div>
+
+                        <div>
+                            <span>Verified</span>
+                            <strong id="verifiedCount">0</strong>
+                        </div>
+                    </div>
+
+
+                    <div class="summary-card weak">
+                        <div class="summary-icon">!</div>
+
+                        <div>
+                            <span>Weak Support</span>
+                            <strong id="weakCount">0</strong>
+                        </div>
+                    </div>
+
+
+                    <div class="summary-card not-found">
+                        <div class="summary-icon">×</div>
+
+                        <div>
+                            <span>Not Found</span>
+                            <strong id="notFoundCount">0</strong>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="results-card">
+
+                    <div class="results-header">
+
+                        <div>
+                            <h3>Receipt results</h3>
+
+                            <p>
+                                Citation verification results
+                            </p>
+                        </div>
+
+                        <span id="resultTotal">
+                            0 citations
+                        </span>
+
+                    </div>
+
+                    <div id="resultsList"></div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- FIND PAGE -->
+
+        <section id="findPage" class="page">
+
+            <div class="hero">
+
+                <div>
+                    <h3>Find supporting sources.</h3>
+
+                    <p>
+                        Enter a claim or topic and Receipt will find
+                        relevant academic sources.
+                    </p>
+                </div>
+
+                <div class="badge">
+                    ⌕ Source Discovery
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="card-header">
+
+                    <div>
+                        <h3>What are you researching?</h3>
+
+                        <p>
+                            Enter a claim, topic, or research question.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <textarea
+                    id="findInput"
+                    placeholder="Example:
+
+AI tutoring improves student performance."
+                ></textarea>
+
+
+                <div class="input-footer">
+
+                    <span id="findCharCount">
+                        0 characters
+                    </span>
+
+                    <button id="findButton" class="primary-button">
+                        ⌕ Find Sources
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div id="findError" class="error hidden"></div>
+
+
+            <div id="findLoading" class="loading hidden">
+
+                <div class="spinner"></div>
+
+                <div>
+                    <strong>Finding sources...</strong>
+
+                    <span>
+                        Searching for relevant references.
+                    </span>
+                </div>
+
+            </div>
+
+
+            <div id="findResults" class="find-results hidden">
+
+                <div class="section-header">
+
+                    <div>
+                        <div class="eyebrow">SOURCE DISCOVERY</div>
+                        <h3>Relevant sources</h3>
+                    </div>
+
+                </div>
+
+                <div id="sourcesList"></div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script src="app.js"></script>
+
+</body>
+</html>

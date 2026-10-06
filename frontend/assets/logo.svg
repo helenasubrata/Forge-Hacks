@@ -1,0 +1,136 @@
+<svg
+  width="64"
+  height="64"
+  viewBox="0 0 64 64"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <defs>
+    <linearGradient id="bg" x1="5" y1="5" x2="59" y2="59">
+      <stop offset="0%" stop-color="#4F46E5"/>
+      <stop offset="55%" stop-color="#635BFF"/>
+      <stop offset="100%" stop-color="#7C3AED"/>
+    </linearGradient>
+
+    <linearGradient id="paper" x1="20" y1="12" x2="45" y2="52">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#EDE9FE"/>
+    </linearGradient>
+
+    <linearGradient id="check" x1="37" y1="35" x2="54" y2="52">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#4F46E5"/>
+    </linearGradient>
+
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow
+        dx="0"
+        dy="3"
+        stdDeviation="3"
+        flood-opacity="0.22"
+      />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect
+    x="2"
+    y="2"
+    width="60"
+    height="60"
+    rx="17"
+    fill="url(#bg)"
+  />
+
+  <!-- Decorative glow -->
+  <circle
+    cx="11"
+    cy="12"
+    r="14"
+    fill="#A78BFA"
+    opacity="0.22"
+  />
+
+  <circle
+    cx="55"
+    cy="53"
+    r="16"
+    fill="#60A5FA"
+    opacity="0.20"
+  />
+
+  <!-- Back paper -->
+  <path
+    d="M17 14C17 12.343 18.343 11 20 11H36L44 19V47C44 48.657 42.657 50 41 50H20C18.343 50 17 48.657 17 47V14Z"
+    fill="#DDD6FE"
+    opacity="0.55"
+  />
+
+  <!-- Main document -->
+  <path
+    d="M14 13C14 11.343 15.343 10 17 10H33L42 19V45C42 46.657 40.657 48 39 48H17C15.343 48 14 46.657 14 45V13Z"
+    fill="url(#paper)"
+    filter="url(#shadow)"
+  />
+
+  <!-- Fold -->
+  <path
+    d="M33 10V18C33 18.552 33.448 19 34 19H42"
+    fill="#DDD6FE"
+  />
+
+  <path
+    d="M33 10V18C33 18.552 33.448 19 34 19H42"
+    stroke="#C4B5FD"
+    stroke-width="1"
+  />
+
+  <!-- Citation lines -->
+  <rect
+    x="20"
+    y="24"
+    width="16"
+    height="3"
+    rx="1.5"
+    fill="#7C3AED"
+    opacity="0.75"
+  />
+
+  <rect
+    x="20"
+    y="30"
+    width="14"
+    height="3"
+    rx="1.5"
+    fill="#8B5CF6"
+    opacity="0.65"
+  />
+
+  <rect
+    x="20"
+    y="36"
+    width="9"
+    height="3"
+    rx="1.5"
+    fill="#A78BFA"
+    opacity="0.65"
+  />
+
+  <!-- Verification badge -->
+  <circle
+    cx="42"
+    cy="42"
+    r="10"
+    fill="url(#check)"
+    filter="url(#shadow)"
+  />
+
+  <!-- Check -->
+  <path
+    d="M37.5 42L40.5 45L47 38.5"
+    stroke="white"
+    stroke-width="2.8"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+</svg>
