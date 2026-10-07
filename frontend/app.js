@@ -299,21 +299,19 @@ function renderCitation(item) {
 
 
     const authors =
-        item.authors ||
-        item.author ||
-        "";
+    textValue(item.authors) ||
+    textValue(item.author) ||
+    "";
 
+const year =
+    textValue(item.year) ||
+    textValue(item.publication_year) ||
+    "";
 
-    const year =
-        item.year ||
-        item.publication_year ||
-        "";
-
-
-    const journal =
-        item.journal ||
-        item.venue ||
-        "";
+const journal =
+    textValue(item.journal) ||
+    textValue(item.venue) ||
+    "";
 
 
     let icon = "?" ;
