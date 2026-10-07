@@ -1,4 +1,4 @@
-const API_BASE = "http://127.0.0.1:8000";
+const API_BASE = window.RECEIPTS_API_URL || "http://127.0.0.1:8000";
 
 const auditInput = document.getElementById("auditInput");
 const findInput = document.getElementById("findInput");
@@ -13,6 +13,7 @@ const pageTitle = document.getElementById("pageTitle");
 
 const resultsSection = document.getElementById("resultsSection");
 const resultsList = document.getElementById("resultsList");
+const sourcesList = document.getElementById("sourcesList");
 
 
 /* =========================
