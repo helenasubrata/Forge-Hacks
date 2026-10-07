@@ -1,78 +1,234 @@
-# 🧾 Receipt
+# 🧾 Receipts
 
-<div align="center">
+### Citation Trust, Without the Guesswork.
 
-# Receipt
+Receipts is an AI-powered citation verification and source discovery tool for academic writing.
 
-### Don't just cite it. Receipt it.
+Instead of trusting that a citation "looks right", Receipts helps writers check whether a reference can actually be found and whether its bibliographic details match a real source.
 
-**AI-powered citation discovery, verification, and auditing for trustworthy research.**
-
-</div>
-
-## 📖 Overview
-
-**Receipt** is an AI-powered citation assistant designed to help students, researchers, and writers **find, verify, and audit citations** used in academic and research writing.
-
-With the rise of generative AI, creating a research paper or essay has become easier than ever. However, AI-generated citations are not always reliable. A citation may look legitimate while the source does not exist, the metadata is incorrect, or the source does not actually support the claim.
-
-Receipt provides a verification layer between **a claim and its evidence**.
-
-Instead of simply asking:
-
-> "Can AI give me a citation?"
-
-Receipt asks:
-
-> **"Does this citation actually exist, and does it support my claim?"**
+🔗 **Live Demo:** https://tryreceipts.vercel.app
 
 ---
 
-## 🎯 The Problem
+## 🚨 The Problem
 
-AI can generate convincing-looking references in seconds.
+Academic writing depends on reliable sources.
 
-However, users may encounter:
+But checking references manually is slow and error-prone:
 
-- ❌ Fabricated or nonexistent sources
-- ⚠️ Incorrect authors, titles, or publication details
-- 🔗 Invalid or broken DOI links
-- 📚 Sources that are related to the topic but do not support the claim
-- 📝 Claims that are broader than the evidence
-- 🔍 References that require time-consuming manual verification
+- Is this paper actually real?
+- Does the title match the cited source?
+- Is the author correct?
+- Is the publication year correct?
+- Did I accidentally cite a source that doesn't exist?
+- What source should I use to support this claim?
 
-For students and researchers, manually checking every citation can take significant time.
+Students often have to search databases one by one just to answer these questions.
 
-### The real problem
-
-> **Finding a citation is easy. Knowing whether you can trust it is not.**
+**Receipts turns that process into one workflow.**
 
 ---
 
-## 💡 Our Solution
+## 💡 The Solution
 
-Receipt acts as an **AI-powered trust layer for citations**.
+Receipts combines AI reasoning with academic source retrieval to help users:
 
-Users can:
+> **Audit citations they already have — and discover sources they still need.**
 
-1. 🔍 **Find** relevant sources for a claim
-2. 🧾 **Paste** a citation or bibliography
-3. 🤖 **Audit** the references using AI
-4. 🛡️ **Verify** whether sources can be found
-5. 🧠 **Check** whether the evidence actually supports the claim
-6. 📊 **Understand** why a citation is trustworthy or needs review
+### Two Core Workflows
 
-### Core workflow
+#### 🔎 Citation Audit
+
+Paste a citation or an entire bibliography.
+
+Receipts analyzes each reference and classifies it as:
+
+- 🟢 **Verified** — the source was found and the reference details match.
+- 🟡 **Details Don't Match** — a related source was found, but some bibliographic details differ.
+- 🔴 **Not Found** — no matching source could be identified.
+- ⚪ **Can't Check** — there wasn't enough information to confidently verify it.
+
+#### 📚 Find Sources
+
+Have a claim but don't know what to cite?
+
+Paste the claim and Receipts finds relevant academic sources, including:
+
+- Paper title
+- Authors
+- Publication year
+- Journal / venue
+- Source link
+
+---
+
+## ✨ Features
+
+### Citation Audit
+Verify individual citations or complete bibliographies.
+
+### Source Discovery
+Find academic sources relevant to a claim.
+
+### AI-Assisted Verification
+AI helps interpret citation details and compare them against retrieved source information.
+
+### Clear Trust Labels
+Results are separated into understandable verification states instead of giving users an unexplained confidence score.
+
+### Multiple Citation Support
+Audit multiple references in a single request and get an overview of the results.
+
+### Clean Academic Workflow
+Designed to fit naturally into the research and writing process.
+
+---
+
+## 🧠 How It Works
 
 ```text
-Claim / Citation / Bibliography
-              ↓
-         AI Processing
-              ↓
-       Source Retrieval
-              ↓
-        Citation Audit
-              ↓
-     Claim ↔ Evidence Check
-              ↓
-          Trust Label
+                    ┌──────────────────┐
+                    │       User       │
+                    │ Citation / Claim │
+                    └────────┬─────────┘
+                             │
+                             ▼
+                    ┌──────────────────┐
+                    │     Receipts     │
+                    │    FastAPI API   │
+                    └────────┬─────────┘
+                             │
+                  ┌──────────┴──────────┐
+                  ▼                     ▼
+          ┌───────────────┐     ┌───────────────┐
+          │ Source Search │     │   AI Analysis │
+          │  & Retrieval  │     │  & Matching   │
+          └───────┬───────┘     └───────┬───────┘
+                  │                     │
+                  └──────────┬──────────┘
+                             ▼
+                    ┌──────────────────┐
+                    │ Verification /   │
+                    │ Source Results   │
+                    └──────────────────┘
+```
+
+---
+
+## 🎯 Why Receipts?
+
+Most citation tools focus on **formatting**.
+
+Receipts focuses on **trust**.
+
+A citation can follow APA formatting perfectly and still point to the wrong paper, contain incorrect bibliographic details, or reference a source that does not exist.
+
+Receipts asks a different question:
+
+> **Can I actually find the source behind this citation?**
+
+This makes Receipts useful not only for formatting references, but for checking whether the references themselves are trustworthy.
+
+---
+
+## 🏗️ Tech Stack
+
+### Frontend
+- HTML
+- CSS
+- JavaScript
+- Vercel
+
+### Backend
+- Python
+- FastAPI
+- Vercel
+
+### AI
+- Groq
+- OpenAI-compatible LLM API
+
+### Academic Source Retrieval
+- Semantic Scholar API
+
+---
+
+## 🔐 Trust & Safety
+
+Receipts is designed to assist with citation verification, not replace academic judgment.
+
+AI-generated results are treated as supporting analysis, while source metadata and retrieval results provide the evidence used for verification.
+
+API keys are stored as environment variables and are not exposed in the frontend.
+
+---
+
+## 🚀 Live Demo
+
+**Frontend:**  
+https://tryreceipts.vercel.app
+
+**Backend API:**  
+https://receipts-api.vercel.app
+
+---
+
+## 📂 Project Structure
+
+```text
+Forge-Hacks/
+│
+├── backend/
+│   ├── routes/
+│   │   ├── audit.py
+│   │   └── find.py
+│   ├── services/
+│   │   ├── audit.py
+│   │   ├── find.py
+│   │   └── parser.py
+│   ├── __init__.py
+│   ├── llm.py
+│   └── main.py
+│
+├── frontend/
+│   ├── assets/
+│   │   └── logo.svg
+│   ├── index.html
+│   ├── styles.css
+│   └── app.js
+│
+├── index.py
+├── requirements.txt
+├── .env.example
+├── .gitignore
+└── README.md
+```
+
+---
+
+## 🔮 Future Improvements
+
+Potential future directions include:
+
+- 🔗 **DOI-level verification** for more precise source matching
+- 📚 **More academic databases** beyond the current source provider
+- 📝 **Citation export** to APA, MLA, Chicago, and other formats
+- 🌐 **Browser extension** for checking citations while researching
+- 📄 **PDF and document scanning** to audit references directly from documents
+- 🔄 **In-text citation ↔ bibliography consistency checking**
+- ✍️ **Citation recommendations** based on the user's writing
+- 🎯 **Stronger evidence matching** between claims and sources
+- 🧠 **Better semantic matching** for paraphrased or incomplete citations
+- 📊 **Citation quality insights** across an entire document
+
+---
+
+## 👥 Built For
+
+Students, researchers, and writers who want to spend less time manually checking references and more time doing meaningful research.
+
+---
+
+## 🧾 Built with Receipts
+
+**Don't just cite it. Get the receipts.**
