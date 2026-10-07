@@ -251,6 +251,27 @@ function getStatus(item) {
 /* =========================
    AUDIT CARD
 ========================= */
+function textValue(value) {
+    if (value == null) return "";
+
+    if (typeof value === "string" || typeof value === "number") {
+        return String(value);
+    }
+
+    if (typeof value === "object") {
+        return (
+            value.title ||
+            value.name ||
+            value.text ||
+            value.citation ||
+            value.reference ||
+            value.message ||
+            JSON.stringify(value)
+        );
+    }
+
+    return String(value);
+}
 
 function renderCitation(item) {
 
@@ -262,19 +283,19 @@ function renderCitation(item) {
 
 
     const title =
-        item.title ||
-        item.citation ||
-        item.reference ||
-        item.text ||
-        item.source_title ||
-        "Citation";
+    textValue(item.title) ||
+    textValue(item.citation) ||
+    textValue(item.reference) ||
+    textValue(item.text) ||
+    textValue(item.source_title) ||
+    "Citation";
 
 
     const reason =
-        item.reason ||
-        item.explanation ||
-        item.message ||
-        "";
+    textValue(item.reason) ||
+    textValue(item.explanation) ||
+    textValue(item.message) ||
+    "";
 
 
     const authors =
