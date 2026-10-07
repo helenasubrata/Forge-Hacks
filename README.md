@@ -194,11 +194,8 @@ Receipts can also help users discover relevant sources when they know what they 
 
 ## 🚀 Live Demo
 
-**Frontend:**  
-https://tryreceipts.vercel.app
-
-**Backend API:**  
-https://receipts-api.vercel.app
+**Frontend:** https://tryreceipts.vercel.app  
+**Backend API:** https://receipts-api.vercel.app
 
 ---
 
