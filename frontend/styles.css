@@ -1251,3 +1251,24 @@ textarea:focus {
     }
 
 }
+
+.hero-flow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 18px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.hero-flow span:not(:nth-child(even)) {
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+}
+
+.hero-flow span:nth-child(even) {
+    color: var(--text-muted);
+}
