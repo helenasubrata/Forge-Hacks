@@ -35,6 +35,16 @@ Receipts combines AI reasoning with academic source retrieval to help users:
 
 > **Audit citations they already have — and discover sources they still need.**
 
+---
+
+## 🏆 Hackathon Track
+
+**AI + Education**
+
+Receipts uses AI-powered source retrieval and reasoning to help students and academic writers verify citations, identify citation mismatches, and discover reliable academic sources. 
+
+---
+
 ### Two Core Workflows
 
 #### 🔎 Citation Audit
@@ -163,6 +173,25 @@ API keys are stored as environment variables and are not exposed in the frontend
 
 ---
 
+## 🌍 Real-World Impact
+
+Receipts is designed to reduce the time and effort required to verify academic references.
+
+For students and researchers, manually checking every citation can mean searching multiple academic databases and comparing bibliographic details one by one.
+
+Receipts turns this into a single workflow:
+
+1. Paste a citation or bibliography.
+2. Retrieve potentially matching academic sources.
+3. Compare citation details against retrieved metadata.
+4. Receive a clear verification result.
+
+This can help users catch incorrect, incomplete, or unverifiable references before they become part of an academic paper.
+
+Receipts can also help users discover relevant sources when they know what they want to research but do not yet know what to cite.
+
+---
+
 ## 🚀 Live Demo
 
 **Frontend:**  
@@ -170,6 +199,22 @@ https://tryreceipts.vercel.app
 
 **Backend API:**  
 https://receipts-api.vercel.app
+
+---
+
+## 🎥 Demo Video
+
+**Public Demo Video:**  
+[ADD YOUTUBE LINK]
+
+The demo shows:
+
+- The citation verification problem
+- How Citation Audit works
+- How Find Sources works
+- AI-assisted source matching
+- Verification results
+- The deployed Receipts application
 
 ---
 
