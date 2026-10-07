@@ -37,6 +37,22 @@ Receipts combines AI reasoning with academic source retrieval to help users:
 
 ---
 
+## 🧠 What Makes Receipts Different?
+
+Most citation tools focus on **formatting**.
+
+Receipts focuses on **citation trust** by combining source retrieval, AI-assisted matching, and clear verification labels in one workflow.
+
+Instead of asking:
+
+> “Is my citation formatted correctly?”
+
+Receipts asks:
+
+> **“Can I actually find the source behind this citation, and do the details match?”**
+
+---
+
 ## 🏆 Hackathon Track
 
 **AI + Education**
@@ -159,7 +175,7 @@ This makes Receipts useful not only for formatting references, but for checking 
 - OpenAI-compatible LLM API
 
 ### Academic Source Retrieval
-- Semantic Scholar API
+- Academic source retrieval
 
 ---
 
@@ -248,19 +264,28 @@ Forge-Hacks/
 
 ---
 
+## ⚠️ Limitations
+
+Receipts relies on available academic source metadata and retrieval results.
+
+A **Not Found** result does not necessarily mean that a paper does not exist. It may mean that Receipts could not confidently retrieve or match the source.
+
+Users should always review the original source before citing it in academic work.
+
+---
+
 ## 🔮 Future Improvements
 
 Potential future directions include:
 
 - 🔗 **DOI-level verification** for more precise source matching
-- 📚 **More academic databases** beyond the current source provider
+- 📚 **More academic databases** beyond the current retrieval sources
 - 📝 **Citation export** to APA, MLA, Chicago, and other formats
 - 🌐 **Browser extension** for checking citations while researching
 - 📄 **PDF and document scanning** to audit references directly from documents
 - 🔄 **In-text citation ↔ bibliography consistency checking**
 - ✍️ **Citation recommendations** based on the user's writing
 - 🎯 **Stronger evidence matching** between claims and sources
-- 🧠 **Better semantic matching** for paraphrased or incomplete citations
 - 📊 **Citation quality insights** across an entire document
 
 ---
