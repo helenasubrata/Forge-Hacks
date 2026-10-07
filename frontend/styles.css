@@ -1272,3 +1272,123 @@ textarea:focus {
 .hero-flow span:nth-child(even) {
     color: var(--text-muted);
 }
+
+/* ================================
+   RECEIPTS BACKEND RESULTS
+   (paste at the end of styles.css)
+   ================================ */
+
+/* "Can't check" had no colors */
+.result-icon.cant-check,
+.trust-label.cant-check {
+    background: #f1f2f4;
+    color: #6b7280;
+}
+
+/* Server offline dot */
+.status-dot.offline {
+    background: var(--red);
+    box-shadow: 0 0 0 4px var(--red-light);
+    animation: none;
+}
+
+/* Audit: list of problems */
+.issues {
+    list-style: disc;
+    padding-left: 26px;
+}
+
+.issues li + li {
+    margin-top: 3px;
+}
+
+/* Audit: the real paper it matched */
+.match-line {
+    margin-top: 10px;
+    color: var(--muted);
+    font-size: 10px;
+    line-height: 1.6;
+}
+
+.match-line .source-link {
+    margin-top: 0;
+    margin-left: 6px;
+}
+
+/* Corrected / ready-made citation with a Copy button */
+.cite-box {
+    margin-top: 11px;
+    padding: 10px 11px;
+    background: #f7f8fa;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.cite-box > div {
+    min-width: 0;
+}
+
+.cite-heading {
+    color: #9298a0;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+}
+
+.cite-text {
+    margin-top: 4px;
+    font-size: 11px;
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+}
+
+.copy-button {
+    flex-shrink: 0;
+    font-family: inherit;
+    font-size: 10px;
+    padding: 5px 10px;
+}
+
+/* Find: the evidence quote from the abstract */
+.evidence {
+    margin-top: 11px;
+    padding: 9px 12px;
+    border-left: 3px solid var(--yellow);
+    background: var(--yellow-light);
+    border-radius: 0 7px 7px 0;
+    font-size: 11.5px;
+    font-style: italic;
+    line-height: 1.55;
+}
+
+.evidence.verified {
+    border-left-color: var(--green);
+    background: var(--green-light);
+}
+
+.evidence.not-found {
+    border-left-color: var(--red);
+    background: var(--red-light);
+}
+
+.source-card .trust-label {
+    margin-bottom: 8px;
+}
+
+/* Fix: these two variables didn't exist */
+.hero-flow {
+    color: var(--muted);
+}
+
+.hero-flow span:not(:nth-child(even)) {
+    background: var(--white);
+}
+
+.hero-flow span:nth-child(even) {
+    color: var(--muted);
+}
