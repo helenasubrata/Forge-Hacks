@@ -49,4 +49,7 @@ def health():
             results[name] = f"failed: {error.__class__.__name__}"
     results["s2_key_set"] = bool(s2_key)
     results["llm_configured"] = all(os.getenv(k) for k in ("LLM_BASE_URL", "LLM_API_KEY", "LLM_MODEL"))
+    raw_key = os.getenv("S2_API_KEY") or ""
+    results["s2_key_length"] = len(raw_key)
+    results["s2_key_has_inner_space_or_newline"] = any(c.isspace() for c in raw_key.strip())
     return results
