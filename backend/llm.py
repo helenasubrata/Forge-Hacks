@@ -13,9 +13,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-LLM_BASE_URL = os.getenv("LLM_BASE_URL", "").rstrip("/")
-LLM_API_KEY = os.getenv("LLM_API_KEY")
-LLM_MODEL = os.getenv("LLM_MODEL")
+LLM_BASE_URL = (os.getenv("LLM_BASE_URL") or "").strip().strip('"').rstrip("/")
+LLM_API_KEY = (os.getenv("LLM_API_KEY") or "").strip().strip('"')
+LLM_MODEL = (os.getenv("LLM_MODEL") or "").strip().strip('"')
 
 
 def ask_llm(prompt, system=None, temperature=0):
