@@ -39,7 +39,7 @@ def health():
         "openalex": "https://api.openalex.org/works?search=deep+learning&per-page=1",
         "semantic_scholar": "https://api.semanticscholar.org/graph/v1/paper/search?query=deep+learning&limit=1&fields=title",
     }
-    s2_key = os.getenv("S2_API_KEY")
+    s2_key = (os.getenv("S2_API_KEY") or "").strip().strip('"') or None
     results = {}
     for name, url in checks.items():
         headers = {"x-api-key": s2_key} if name == "semantic_scholar" and s2_key else {}

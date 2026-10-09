@@ -9,7 +9,7 @@ from difflib import SequenceMatcher
 import requests
 
 load_dotenv()  # reads your private keys from the .env file
-S2_API_KEY = os.getenv("S2_API_KEY")
+S2_API_KEY = (os.getenv("S2_API_KEY") or "").strip().strip('"') or None
 
 CONTACT_EMAIL = "notwilliam007@gmail.com"  # put your real email here
 
