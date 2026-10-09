@@ -76,12 +76,27 @@ def audit_citation(citation):
     if title and doi_paper and _similarity(title, doi_paper["title"]) >= TITLE_MATCH:
         match, best = doi_paper, 1.0
     elif title:
+        close = []
         for paper in search_all(title, rows=5):
             score = _similarity(title, paper.get("title", ""))
-            if score > best:
-                match, best = paper, score
-        if best < TITLE_MATCH:
-            match = None
+            if score >= TITLE_MATCH:
+                close.append((score, paper))
+        if close:
+            # The same paper often exists as several records (original, preprint, re-uploads).
+            # Prefer a record whose authors and year agree with the citation before calling it wrong.
+            cited_year = citation.get("year")
+
+            def agreement(item):
+                score, paper = item
+                names = [_plain(n).split()[-1] for n in paper.get("authors", [])[:1] if _plain(n)]
+                first_author_ok = bool(names) and names[0] in _plain(raw).split()
+                authors_ok = _author_issue(paper, raw) is None
+                year = paper.get("year")
+                exact_year = bool(cited_year and year and cited_year == year)
+                close_year = bool(cited_year and year and abs(cited_year - year) <= 1)
+                return (first_author_ok, authors_ok, exact_year, close_year, score, paper.get("citations") or 0)
+
+            best, match = max(close, key=agreement)
 
     # A DOI that exists but belongs to a different paper is a classic fabrication.
     if title and doi_paper and _similarity(title, doi_paper["title"]) < 0.6:
