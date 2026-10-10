@@ -213,7 +213,7 @@ Receipts can also help users discover relevant sources when they know what they 
 ## 🎥 Demo Video
 
 **Public Demo Video:**  
-[ADD YOUTUBE LINK]
+https://youtu.be/w_YxujoA83k
 
 The demo shows:
 
